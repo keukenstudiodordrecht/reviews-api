@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Klanten Vertellen Reviews</title>
+  </head>
+  <body>
+    <span id="title"></span>
+    <span id="reviewText"></span>
+    <span id="rating"></span>
+    <span id="reaction"></span>
+    <span id="source"></span>
+    <script>
+      const api_url = "http://localhost:666/reviews";
+      async function getReviews() {
+        const response = await fetch(api_url);
+        const data = await response.json();
+        console.log(data);
+        const { title, reviewText, rating, reaction, source } = data;
+
+        document.getElementById("title").textContent = title;
+        document.getElementById("reviewText").textContent = reviewText;
+        document.getElementById("rating").textContent = rating;
+        document.getElementById("reaction").textContent = reaction;
+        document.getElementById("source").textContent = source;
+      }
+      getReviews();
+    </script>
+  </body>
+</html>
