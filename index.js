@@ -1,4 +1,4 @@
-const PORT = 5500;
+const PORT = process.env.PORT || 666;
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
