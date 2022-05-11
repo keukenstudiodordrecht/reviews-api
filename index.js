@@ -35,11 +35,17 @@ reviewPlatforms.forEach(reviewPlatform => {
 
 app.listen(PORT, () => console.log(`Server is running localhost:${PORT}`));
 
+
+
 app.get("/", (req, res) => { // homepage
     res.json("Welkom op mijn review API");
+    res.set('Access-Control-Allow-Origin', '*');
+    res.sendFile(__dirname + '/message.json');
 });
 
 app.get("/reviews", (req, res) => { // /reviews
+    res.set('Access-Control-Allow-Origin', '*');
+    res.sendFile(__dirname + '/message.json');
     axios
         .get(
             "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC"
