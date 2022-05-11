@@ -15,7 +15,7 @@
     <script>
       const api_url = "https://reviewsksd.herokuapp.com/reviews";
       async function getReviews() {
-        const response = await fetch(api_url);
+        const response = await fetch(api_url, {mode:'cors'});
         const data = await response.json();
         console.log(data);
         const { title, reviewText, rating, reaction, source } = data;
