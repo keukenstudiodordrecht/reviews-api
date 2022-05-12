@@ -25,7 +25,7 @@
   <script>
     const heroku = "https://reviewsksd.herokuapp.com/reviews/"
     const local = "http://localhost:666/reviews"
-    const api_url = `${heroku}`;
+    const api_url = `${local}`;
     async function getReviews() {
       console.log("Getting reviews...");
       const response = await fetch(api_url, {
