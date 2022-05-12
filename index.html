@@ -1,33 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Klanten Vertellen Reviews</title>
-  </head>
-  <body>
-    <h1>Reviews van Keukenstudio Dordrecht</h1>
-    <span id="tit"></span>
-    <span id="rev"></span>
-    <span id="rat"></span>
-    <span id="rea"></span>
-    <span id="sou"></span>
-    <script>
-      const api_url = "https://reviewsksd.herokuapp.com/reviews";
-      async function getReviews() {
-        const response = await fetch(api_url, {mode:'cors'});
-        const data = await response.json();
-        const { title, reviewText, rating, reaction, source } = data;
-console.log(title)
-        document.getElementById("tit").textContent = title;
-        document.getElementById("rev").textContent = reviewText;
-        document.getElementById("rat").textContent = rating;
-        document.getElementById("rea").textContent = reaction;
-        document.getElementById("sou").textContent = source;
-        
-      }
-      getReviews();
-    </script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="stylesheet.css" />
+  <title>Klanten Vertellen Reviews</title>
+</head>
+
+<body>
+  <h1 style="text-align: center;">Onze Reviews</h1>
+  <div class="review-card">
+  <h2 id="tit"></h2>
+  <p>
+    <span id="rev"></span> <br> <br>
+   <span id="rat"></span> <br> <br>
+  <span id="rea"></span> <br> <br> 
+    <span id="sou"></span> <br><br>
+  </p>
+<button class="button middle" type="button" id="api"><a href="http://localhost:666/reviews/" target="_blank">ga naar api</a></button>
+</div>
+
+  <script>
+    const heroku = "https://reviewsksd.herokuapp.com/reviews/"
+    const local = "http://localhost:666/reviews"
+    const api_url = heroku;
+    async function getReviews() {
+      console.log("Getting reviews...");
+      const response = await fetch(api_url, {
+        mode: "cors"
+      });
+      const data = await response.json();
+      const random = Math.floor(Math.random() * data.length);
+      let i = [random];
+      const d = data[i].reviews.review[0];
+      const {
+        title,
+        reviewText,
+        rating,
+        reaction,
+        source
+      } = data;
+      document.getElementById("tit").textContent = `${d.title}`;
+      document.getElementById("rev").textContent = `"${d.reviewText}"`;
+      document.getElementById("rat").textContent = `Cijfer: ${d.rating}`;
+      document.getElementById("rea").textContent = `Reactie van het bedrijf: ${d.reaction}`
+      document.getElementById("sou").textContent = `Bron van review: ${d.source}`;
+    }
+    getReviews();
+  </script>
+</body>
+
 </html>

@@ -25,7 +25,7 @@ const reviewPlatforms = [{
     },
 ];
 
-reviewPlatforms.forEach(reviewPlatform => {
+reviewPlatforms.forEach(reviewPlatform => { // /google, facebook en klantenvertellen
     axios.get(reviewPlatform.adress)
     .then(response => {
         const html = response.data
@@ -56,19 +56,27 @@ app.get("/reviews", (req, res) => { // /reviews
                 console.log(req.params.keyWord);
             });
 
-            $('div.review:contains("hoop")', html).each(function () {
+            $('div.review:contains("klantvriendelijkheid")', html).each(function () {
                 const title = $("h4", this).text();
                 const reviewText = $("p.text.opinion", this).html();
                 const rating = $("span", this).html();
                 const reaction = $("div.review-response > p", this).text();
-                const source = "KlantenVertellen"
+                const source = "Klanten Vertellen"
 
                 reviews.push({
-                    title,
-                    reviewText,
-                    rating,
-                    reaction,
-                    source //: reviewPlatforms.name
+                    
+                        reviews: {
+                         review: [
+                           {
+                            title ,
+                            reviewText ,
+                            rating ,
+                            reaction ,
+                            source ,
+                           }
+                          ]
+                        }
+                       
                 });
             });
             res.set('Access-Control-Allow-Origin', '*');
