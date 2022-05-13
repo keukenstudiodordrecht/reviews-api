@@ -56,7 +56,7 @@ app.get("/reviews", (req, res) => { // /reviews
                 console.log(req.params.keyWord);
             });
 
-            $('div.review:contains("klantvriendelijkheid")', html).each(function () {
+            $('div.review:contains("goed")', html).each(function () {
                 const title = $("h4", this).text();
                 const reviewText = $("p.text.opinion", this).html();
                 const rating = $("span", this).html();
@@ -66,7 +66,7 @@ app.get("/reviews", (req, res) => { // /reviews
                 reviews.push({
                     
                         reviews: {
-                         review: [
+                         review: 
                            {
                             title ,
                             reviewText ,
@@ -74,7 +74,7 @@ app.get("/reviews", (req, res) => { // /reviews
                             reaction ,
                             source ,
                            }
-                          ]
+                           
                         }
                        
                 });
