@@ -63,7 +63,7 @@ app.get("/reviews", (req, res) => { // /reviews
                 const reaction = $("div.review-response > p", this).text();
                 const source = "Klanten Vertellen"
 
-                reviews.push({
+                reviews.call({
                     
                         reviews: {
                          review: 
