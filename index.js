@@ -53,10 +53,52 @@ app.get("/reviews", (req, res) => { // /reviews
             const $ = cheerio.load(html);
 
             app.get("/reviews/:keyWord", async (req, res) => {
-                console.log(req.params.keyWord);
+                let keyWord = req.params.keyWord;
+                console.log(keyWord);
+                
             });
+            $(`div.review:contains(${keyWord})`, html).each(function () {
+                const title = $("h4", this).text();
+                const reviewText = $("p.text.opinion", this).html();
+                const rating = $("span", this).html();
+                const reaction = $("div.review-response > p", this).text();
+                const source = "Klanten Vertellen"
 
-            $('div.review:contains("goed")', html).each(function () {
+                reviews.push({
+                    
+                        reviews: {
+                         review: 
+                           {
+                            title ,
+                            reviewText ,
+                            rating ,
+                            reaction ,
+                            source ,
+                           }
+                           
+                        }
+                       
+                });
+            });
+            res.set('Access-Control-Allow-Origin', '*');
+            res.json(reviews);
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+});
+
+app.get("/reviews/:keyWord", async (req, res) => { // /reviews/keyWord
+    axios
+        .get(
+            "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC"
+        )
+        .then((response) => {
+            const html = response.data;
+            const $ = cheerio.load(html);
+            let keyWord = req.params.keyWord;
+            console.log(keyWord);
+            $(`div.review:contains(${keyWord})`, html).each(function () {
                 const title = $("h4", this).text();
                 const reviewText = $("p.text.opinion", this).html();
                 const rating = $("span", this).html();

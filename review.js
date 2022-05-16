@@ -1,4 +1,4 @@
-const api_url = "https://reviewsksd.herokuapp.com/reviews";
+const api_url = "https://reviewsksd.herokuapp.com/reviews/:keyWord";
 async function getReviews() {
   const response = await fetch(api_url);
   const data = await response.json();
