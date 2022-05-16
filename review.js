@@ -1,4 +1,6 @@
-const api_url = "https://reviewsksd.herokuapp.com/reviews/:keyWord";
+const params = new URLSearchParams(window.location.search);
+keyWord = params.get("keyWord");
+const api_url = `http://localhost:666/reviews/${keyWord}` || `https://reviewsksd.herokuapp.com/reviews/${keyWord}`;
 async function getReviews() {
   const response = await fetch(api_url);
   const data = await response.json();
@@ -13,9 +15,10 @@ async function getReviews() {
   let rat = "";
   let rea = "";
   let sou = "";
+  let nam = "";
   let reviewCard = "";
   let ratingStars = "";
-  let stars = 1; 
+  let stars = 1;
 
   function ratingStar(rat) {
     ratingStars = Number(rat / 2);
@@ -39,6 +42,8 @@ async function getReviews() {
     console.log(`Rating: ${rat}`);
     rea += data[i].reviews["review"].reaction || "";
     console.log(`Reactie: ${rea}`);
+    nam += data[i].reviews["review"].name || "";
+    console.log(`Reactie: ${nam}`);
     sou += data[i].reviews["review"].source;
     console.log(`Source ${sou}`);
 
@@ -48,7 +53,8 @@ async function getReviews() {
        <p>
         <span id="rev">${rev}</span> <br> <br>
       <span id="rat">${ratingStars} </span> <br> <br>
-      <span id="rea">${rea}</span> <br> <br>
+      <span id="nam">Geschreven door: ${nam} </span> <br> <br>
+      <span id="rea">Onze reactie: ${rea}</span> <br> <br>
         <span id="sou"><a href="https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC">${sou}</a></span> <br><br>
       </p></div>`;
 
@@ -56,6 +62,7 @@ async function getReviews() {
     document.getElementById("tit").innerHTML = tit;
     document.getElementById("rev").innerHTML = rev;
     document.getElementById("rat").innerHTML = rat;
+    document.getElementById("nam").innerHTML = nam;
     document.getElementById("rea").innerHTML = rea;
     document.getElementById("sou").innerHTML = sou;
 
@@ -65,6 +72,7 @@ async function getReviews() {
     rea = "";
     sou = "";
     ratingStars = "";
+    nam = "";
   }
 }
 getReviews();

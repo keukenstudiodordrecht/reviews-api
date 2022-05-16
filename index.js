@@ -9,7 +9,8 @@ const {
     contains
 } = require("cheerio/lib/static");
 
-const reviews = [];
+let reviews = [];
+
 const app = express();
 const reviewPlatforms = [{
         name: "Klanten Vertellen",
@@ -43,52 +44,55 @@ app.get("/", (req, res) => { // homepage
  
 });
 
-app.get("/reviews", (req, res) => { // /reviews
-    axios
-        .get(
-            "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC"
-        )
-        .then((response) => {
-            const html = response.data;
-            const $ = cheerio.load(html);
+// app.get("/reviews", (req, res) => { // /reviews
+//     axios
+//         .get(
+//             "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC"
+//         )
+//         .then((response) => {
+//             const html = response.data;
+//             const $ = cheerio.load(html);
 
-            app.get("/reviews/:keyWord", async (req, res) => {
-                let keyWord = req.params.keyWord;
-                console.log(keyWord);
+//             app.get("/reviews/:keyWord", async (req, res) => {
+//                 let keyWord = req.params.keyWord;
+//                 console.log(keyWord);
                 
-            });
-            $(`div.review:contains(${keyWord})`, html).each(function () {
-                const title = $("h4", this).text();
-                const reviewText = $("p.text.opinion", this).html();
-                const rating = $("span", this).html();
-                const reaction = $("div.review-response > p", this).text();
-                const source = "Klanten Vertellen"
+//             });
+//             $(`div.review:contains(${keyWord})`, html).each(function () {
+//                 const title = $("h4", this).text();
+//                 const reviewText = $("p.text.opinion", this).html();
+//                 const rating = $("span", this).html();
+//                 const reaction = $("div.review-response > p", this).text();
+//                 const source = "Klanten Vertellen"
 
-                reviews.push({
+//                 reviews.push({
                     
-                        reviews: {
-                         review: 
-                           {
-                            title ,
-                            reviewText ,
-                            rating ,
-                            reaction ,
-                            source ,
-                           }
+//                         reviews: {
+//                          review: 
+//                            {
+//                             title ,
+//                             reviewText ,
+//                             rating ,
+//                             reaction ,
+//                             source ,
+//                            }
                            
-                        }
+//                         }
                        
-                });
-            });
-            res.set('Access-Control-Allow-Origin', '*');
-            res.json(reviews);
-        })
-        .catch(function (err) {
-            console.log(err);
-        });
-});
+//                 });
+//             });
+//             res.json(reviews.pop([]));
+//             res.set('Access-Control-Allow-Origin', '*');
+//             res.json(reviews);
+//         })
+//         .catch(function (err) {
+//             console.log(err);
+//         });
+// });
 
 app.get("/reviews/:keyWord", async (req, res) => { // /reviews/keyWord
+    let keyWord = req.params.keyWord;
+    console.log(keyWord);
     axios
         .get(
             "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC"
@@ -96,14 +100,14 @@ app.get("/reviews/:keyWord", async (req, res) => { // /reviews/keyWord
         .then((response) => {
             const html = response.data;
             const $ = cheerio.load(html);
-            let keyWord = req.params.keyWord;
-            console.log(keyWord);
+
             $(`div.review:contains(${keyWord})`, html).each(function () {
                 const title = $("h4", this).text();
                 const reviewText = $("p.text.opinion", this).html();
                 const rating = $("span", this).html();
                 const reaction = $("div.review-response > p", this).text();
-                const source = "Klanten Vertellen"
+                const source = "Klanten Vertellen";
+                const name = $("span.name-city",this).text();
 
                 reviews.push({
                     
@@ -115,16 +119,25 @@ app.get("/reviews/:keyWord", async (req, res) => { // /reviews/keyWord
                             rating ,
                             reaction ,
                             source ,
+                            name,
                            }
                            
                         }
                        
                 });
             });
+            
             res.set('Access-Control-Allow-Origin', '*');
-            res.json(reviews);
+            res.json(reviews.reverse());
+if (reviews[0] === reviews[0]){
+    reviews = [];
+};
+            
         })
+        
         .catch(function (err) {
             console.log(err);
         });
+
+        
 });
