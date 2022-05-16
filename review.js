@@ -1,4 +1,4 @@
-const api_url = "http://localhost:666/reviews";
+const api_url = "https://reviewsksd.herokuapp.com/reviews";
 async function getReviews() {
   const response = await fetch(api_url);
   const data = await response.json();
