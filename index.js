@@ -85,20 +85,4 @@ app.get("/reviews", (req, res) => { // /reviews
         .catch(function (err) {
             console.log(err);
         });
-
-        reviews.pop({
-                    
-            reviews: {
-             review: 
-               {
-                title ,
-                reviewText ,
-                rating ,
-                reaction ,
-                source ,
-               }
-               
-            }
-           
-    });
 });
