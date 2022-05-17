@@ -10,7 +10,7 @@
     min-width: 300px;
 
 }
-.review-card.h2{
+#tit{
     color:white;
 }
 
@@ -26,21 +26,7 @@
 
 }
 
-.button.middle {
-    background: white;
-    border-radius: 30px;
-    font-size: 24px;
-    margin: 0px 50px 0px;
-    color: #e82627;
-    border-color: white;
-
-}
-
-.fa.fa-star.checked{
+#rat.fa.fa-star.checked{
     margin-left: 3px;
 
-}
-a{
-    color: white;
-    text-decoration: none;
 }
