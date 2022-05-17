@@ -1,6 +1,6 @@
 const params = new URLSearchParams(window.location.search);
 keyWord = params.get("keyWord");
-keyWord = document.querySelector("#article > div.lp_content-labels > div:nth-child(3) > span").innerText;
+keyWord = document.querySelector("#article > div.lp_content-labels > div:nth-child(3) > span").innerText.toLowerCase();
 const api_url = `https://reviewsksd.herokuapp.com/reviews/${keyWord}`;
 async function getReviews() {
   const response = await fetch(api_url);
