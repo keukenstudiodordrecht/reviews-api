@@ -10,8 +10,9 @@
     min-width: 300px;
 
 }
-#tit{
-    color:white;
+
+#tit {
+    color: white;
 }
 
 #review-card {
@@ -21,12 +22,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-        color: white;
-        font-size: 24px;
+    color: white;
+    font-size: 24px;
 
 }
 
-#rat.fa.fa-star.checked{
+#rat.fa.fa-star.checked {
     margin-left: 3px;
 
 }
