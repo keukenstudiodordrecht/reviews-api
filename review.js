@@ -1,6 +1,6 @@
 const params = new URLSearchParams(window.location.search);
 keyWord = params.get("keyWord");
-const api_url = `http://localhost:666/reviews/${keyWord}` || `https://reviewsksd.herokuapp.com/reviews/${keyWord}`;
+const api_url = `https://reviewsksd.herokuapp.com/reviews/${keyWord}`;
 async function getReviews() {
   const response = await fetch(api_url);
   const data = await response.json();
@@ -18,26 +18,18 @@ async function getReviews() {
   let nam = "";
   let reviewCard = "";
   let ratingStars = "";
-  let stars = 1;
-
-  function ratingStar(rat) {
-    ratingStars = Number(rat / 2);
-    stars = ratingStars;
-  }
+  let numberOfStars = Number;
 
   for (let i = 0; i < data.length; i++) {
     tit += data[i].reviews["review"].title;
-    console.log([`Review ${[i]}:`]);
-    console.log(`Title: ${tit}`);
     rev += data[i].reviews["review"].reviewText || "";
-    console.log(`Review text: ${rev}`);
     rat += data[i].reviews["review"].rating;
-    ratingStar(rat);
 
-    for (let i = 0; i < stars; i++) {
-      ratingStars += `<span class="fa fa-star checked"></span>`;
-      console.log("dit is rating stars: ", ratingStars);
+    function ratingToStars(rat) {
+      numberOfStars = Number(rat / 2);
     }
+
+    ratingToStars(rat);
 
     console.log(`Rating: ${rat}`);
     rea += data[i].reviews["review"].reaction || "";
@@ -47,24 +39,45 @@ async function getReviews() {
     sou += data[i].reviews["review"].source;
     console.log(`Source ${sou}`);
 
+    for (let i = 0; i < parseInt(numberOfStars); i++) {
+      ratingStars += `<span class="fa fa-star checked"></span>`;
+    }
+    console.log();
+
+    function checkNumber(x) {
+      // check if the passed value is a number
+      if (typeof x == "number" && !isNaN(x)) {
+        // check if it is integer
+        if (Number.isInteger(x)) {
+          for (let k = 0; k < parseInt(5 % numberOfStars); k++) {
+            ratingStars += `<span class="fa fa-star-o"></span>`;
+          }
+          console.log(`5 - ratingStars = ${x}. So it's an integer.`);
+        } else {
+          for (let j = 0; j < 0.5; j++) {
+            ratingStars += `<span class="fa fa-star-half-o"></span>`;
+          }
+          console.log(`5 - ratingStars = ${x}. So it's a float value.`);
+        }
+      } else {
+        console.log(`${x} is not a number`);
+      }
+    }
+
+    checkNumber(5 - numberOfStars);
+
     reviewCard += `
        <div class="review-card">
        <h2 id="tit">${tit}</h2>
        <p>
         <span id="rev">${rev}</span> <br> <br>
-      <span id="rat">${ratingStars} </span> <br> <br>
+      <span id="rat">Rating: ${rat} ${ratingStars} </span> <br> <br>
       <span id="nam">Geschreven door: ${nam} </span> <br> <br>
       <span id="rea">Onze reactie: ${rea}</span> <br> <br>
         <span id="sou"><a href="https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl?lang=nl&limit=100&pageNumber=0&filterRating=0&filterLocale=&filterDateScoreOrder=DATE_DESC">${sou}</a></span> <br><br>
       </p></div>`;
 
     document.getElementById("review-card").innerHTML = reviewCard;
-    document.getElementById("tit").innerHTML = tit;
-    document.getElementById("rev").innerHTML = rev;
-    document.getElementById("rat").innerHTML = rat;
-    document.getElementById("nam").innerHTML = nam;
-    document.getElementById("rea").innerHTML = rea;
-    document.getElementById("sou").innerHTML = sou;
 
     tit = "";
     rev = "";
