@@ -10,6 +10,7 @@ const {
 } = require("cheerio/lib/static");
 
 let reviews = [];
+let score = [];
 
 const app = express();
 const reviewPlatforms = [{
@@ -28,10 +29,10 @@ const reviewPlatforms = [{
 
 reviewPlatforms.forEach(reviewPlatform => { // /google, facebook en klantenvertellen
     axios.get(reviewPlatform.adress)
-    .then(response => {
-        const html = response.data
-        const $ = cheerio.load(html)
-    })
+        .then(response => {
+            const html = response.data
+            const $ = cheerio.load(html)
+        })
 })
 
 app.listen(PORT, () => console.log(`Server is running localhost:${PORT}`));
@@ -41,8 +42,47 @@ app.listen(PORT, () => console.log(`Server is running localhost:${PORT}`));
 app.get("/", (req, res) => { // homepage
     res.set('Access-Control-Allow-Origin', '*');
     res.json("Welkom op mijn review API");
- 
+
 });
+
+app.get("/cijfer", (req, res) => {
+    axios.get(
+            "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl"
+        )
+        .then((response) => {
+            const html = response.data;
+            const $ = cheerio.load(html);
+
+                const totaleScore = $("ul:nth-child(4) > li:nth-child(1) > div > span.rating").text();
+                const totaleBeoordelingen = $('ul:nth-child(4) > li:nth-child(2) > div > span.rating').text();
+                const aanbeveling = $('ul:nth-child(4) > li:nth-child(1) > div > span.rating').text();
+                const sterren = Math.round(totaleScore*2)/4;
+                const source = "Klanten Vertellen";
+                const sourceUrl = "https://www.klantenvertellen.nl/reviews/1035633/keukenstudio_dordrecht_nl"
+                score.push({
+
+                    score: {
+
+                        totaleScore,
+                        totaleBeoordelingen,
+                      aanbeveling,
+                       sterren,
+                        source,
+
+
+                    }
+
+                });
+
+
+        });
+        res.set('Access-Control-Allow-Origin', '*');
+        res.json(score);
+        if (score[0] === score[0]) {
+           score = [];
+        };
+
+})
 
 app.get("/reviews", (req, res) => { // /reviews
     axios
@@ -56,7 +96,7 @@ app.get("/reviews", (req, res) => { // /reviews
             app.get("/reviews/:keyWord", async (req, res) => {
                 let keyWord = req.params.keyWord;
                 console.log(keyWord);
-                
+
             });
             $(`div.review:contains(${keyWord})`, html).each(function () {
                 const title = $("h4", this).text();
@@ -66,19 +106,18 @@ app.get("/reviews", (req, res) => { // /reviews
                 const source = "Klanten Vertellen"
 
                 reviews.push({
-                    
-                        reviews: {
-                         review: 
-                           {
-                            title ,
-                            reviewText ,
-                            rating ,
-                            reaction ,
-                            source ,
-                           }
-                           
+
+                    reviews: {
+                        review: {
+                            title,
+                            reviewText,
+                            rating,
+                            reaction,
+                            source,
                         }
-                       
+
+                    }
+
                 });
             });
             res.json(reviews.pop([]));
@@ -107,37 +146,36 @@ app.get("/reviews/:keyWord", async (req, res) => { // /reviews/keyWord
                 const rating = $("span", this).html();
                 const reaction = $("div.review-response > p", this).text();
                 const source = "Klanten Vertellen";
-                const name = $("span.name-city",this).text();
+                const name = $("span.name-city", this).text();
 
                 reviews.push({
-                    
-                        reviews: {
-                         review: 
-                           {
-                            title ,
-                            reviewText ,
-                            rating ,
-                            reaction ,
-                            source ,
+
+                    reviews: {
+                        review: {
+                            title,
+                            reviewText,
+                            rating,
+                            reaction,
+                            source,
                             name,
-                           }
-                           
                         }
-                       
+
+                    }
+
                 });
             });
-            
+
             res.set('Access-Control-Allow-Origin', '*');
             res.json(reviews.reverse());
-if (reviews[0] === reviews[0]){
-    reviews = [];
-};
-            
+            if (reviews[0] === reviews[0]) {
+                reviews = [];
+            };
+
         })
-        
+
         .catch(function (err) {
             console.log(err);
         });
 
-        
+
 });
