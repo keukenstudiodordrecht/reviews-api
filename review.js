@@ -1,4 +1,3 @@
-const params = new URLSearchParams(window.location.search);
 keyWord = document.querySelector("#article > div.lp_content-labels > div:nth-child(3) > span").innerText.toLowerCase();
 const api_url = `https://reviewsksd.herokuapp.com/reviews/${keyWord}`;
 async function getReviews() {
@@ -93,7 +92,7 @@ async function getReviews() {
       .insertAdjacentElement("afterbegin", document.createElement("h3"))
       .setAttribute("id", "onze-reviews");
     document.querySelector("#onze-reviews").innerHTML = "Onze Reviews";
-  } 
+  } else{}
 }
 
 try {
