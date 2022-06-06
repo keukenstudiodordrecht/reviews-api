@@ -1,4 +1,7 @@
-keyWord = document.querySelector("#article > div.lp_content-labels > div:nth-child(3) > span").innerText.toLowerCase();
+keyWord = document.querySelector("#article > div.lp_content-labels > div:nth-child(3) > span");
+if (keyword !== null){
+  keyword = keyWord.innerText.toLowerCase()
+
 const api_url = `https://reviewsksd.herokuapp.com/reviews/${keyWord}`;
 async function getReviews() {
   const response = await fetch(api_url);
@@ -93,7 +96,7 @@ async function getReviews() {
       .setAttribute("id", "onze-reviews");
     document.querySelector("#onze-reviews").innerHTML = "Onze Reviews";
   } else{}
-}
+}}
 
 try {
   getReviews();
